@@ -30,10 +30,10 @@ app.delete('/deleteAPet/:PetId', (req, res) => {
     });
 });
 
-app.post(`/insertAPet/:data`, (req, res) => {
-    const { data } = req.body;
+app.post(`/insertAPet`, (req, res) => {
+    const { name, age, type, genus, desc, owner  } = req.params;
     if (!name) return;
-    connection.query(`INSERT INTO pet (isim, tur, cins, yas, aciklama, user) VALUES (?);`, data.name, data.type, data.genus, data.age, data.desc, data.owner, err => {
+    connection.query(`INSERT INTO pet (isim, tur, cins, yas, aciklama, user) VALUES (?);`, name, type, genus, age, desc, owner , err => {
         if (err) throw err;
         console.log(`${name} INSERTED`);
     });

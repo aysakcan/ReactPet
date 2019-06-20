@@ -17,54 +17,36 @@ import {
 } from 'reactstrap';
 
 export default class Homepage extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
 
         this.state = {
-            name: 'aaa',
-            age: '2',
-            type: 'aaa',
-            genus: 'aaa',
-            desc: 'aaa',
-            owner: 'aaa',
-            data: []
+            name: '',
+            age: '',
+            type: '',
+            genus: '',
+            desc: '',
+            owner: ''
         };
-
-        this.insertPet = this.insertPet.bind(this);
     }
 
-    clearInputs = () => {
-        ReactDOM.findDOMNode(this.refs.petname).value = '';
-        ReactDOM.findDOMNode(this.refs.petage).value = '';
-        ReactDOM.findDOMNode(this.refs.pettype).value = '';
-        ReactDOM.findDOMNode(this.refs.petgenus).value = '';
-        ReactDOM.findDOMNode(this.refs.petdesc).value = '';
-        ReactDOM.findDOMNode(this.refs.petowner).value = '';
+    onChange = (e) => {
+        this.setState({ [e.target.name]: e.target.value });
+      }
+
+    onSubmit = (e) => {
+        e.preventDefault();
+        // get our form data out of state
+        const { name, age, type, genus, desc, owner } = this.state;
+
+        axios.post('http://localhost:3002/insertAPet', { name, age, type, genus, desc, owner })
+          .then((result) => {
+            //access the results here....
+          });
     }
-
-    insertPet = (e) => {
-        const  myArr = [{
-            name: 'aaa',
-            age: '2',
-            type: 'aaa',
-            genus: 'aaa',
-            desc: 'aaa',
-            owner: 'aaa'
-        }];
-
-        this.setState({data: myArr});
-
-        console.log(this.state.data);
-        console.log(myArr);
-
-        axios.post(`http://localhost:3002/insertAPet/${myArr}`)
-            //.then(this.setState({ name: '', age: '', type: '', genus: '', desc: '', owner: '' }))
-            //.then(window.location.reload()); //this line is horrible
-
-        this.clearInputs();
-    };
 
     render() {
+        const { name, age, type, genus, desc, owner } = this.state;
         return (
             <div className="App">
                 <header className="App-header homepageText">
@@ -78,47 +60,47 @@ export default class Homepage extends React.Component {
                     <div className="row">
                         <div className="col-sm-3"></div>
                         <div className="col">
-                            <Form className="d-flex flex-sm-column justify-content-center formText">
+                            <Form className="d-flex flex-sm-column justify-content-center formText" onSubmit={this.onSubmit}>
                                 <FormGroup row>
-                                    <Label for="petname" sm={3}>Name</Label>
+                                    <Label for="name" sm={3}>Name</Label>
                                     <Col sm={9} className="align-self-center">
-                                        <Input type="text" name="petname" id="petname" placeholder="Lucy" ref="petname" required />
+                                        <Input type="text" name="name" id="name" placeholder="Lucy" ref="name" required onChange={this.onChange} value={name}/>
                                     </Col>
                                 </FormGroup>
                                 <FormGroup row>
-                                    <Label for="petage" sm={3}>Age</Label>
+                                    <Label for="age" sm={3}>Age</Label>
                                     <Col sm={9} className="align-self-center">
-                                        <Input type="number" name="petage" id="petage" placeholder="2" min="1" ref="petage" required />
+                                        <Input type="number" name="age" id="age" placeholder="2" min="1" ref="age" required onChange={this.onChange} value={age}/>
                                     </Col>
                                 </FormGroup>
                                 <FormGroup row>
-                                    <Label for="pettype" sm={3}>Type</Label>
+                                    <Label for="type" sm={3}>Type</Label>
                                     <Col sm={9} className="align-self-center">
-                                        <Input type="text" name="pettype" id="pettype" placeholder="Dog" ref="pettype" required />
+                                        <Input type="text" name="type" id="type" placeholder="Dog" ref="type" required onChange={this.onChange} value={type}/>
                                     </Col>
                                 </FormGroup>
                                 <FormGroup row>
-                                    <Label for="petgenus" sm={3}>Genus</Label>
+                                    <Label for="genus" sm={3}>Genus</Label>
                                     <Col sm={9} className="align-self-center">
-                                        <Input type="text" name="petgenus" id="petgenus" placeholder="Golden" ref="petgenus" required />
+                                        <Input type="text" name="genus" id="genus" placeholder="Golden" ref="genus" required onChange={this.onChange} value={genus}/>
                                     </Col>
                                 </FormGroup>
                                 <FormGroup row>
-                                    <Label for="petdesc" sm={3}>Explanation</Label>
+                                    <Label for="desc" sm={3}>Explanation</Label>
                                     <Col sm={9} className="align-self-center">
-                                        <Input type="text" name="petdesc" id="petdesc" placeholder="Female.." ref="petdesc" required />
+                                        <Input type="text" name="desc" id="desc" placeholder="Female.." ref="desc" required onChange={this.onChange} value={desc}/>
                                     </Col>
                                 </FormGroup>
                                 <FormGroup row>
-                                    <Label for="petowner" sm={3}>Email</Label>
+                                    <Label for="owner" sm={3}>Email</Label>
                                     <Col sm={9} className="align-self-center">
-                                        <Input type="email" name="petowner" id="petowner" placeholder="ownerEmail@example.com" ref="petowner" required />
+                                        <Input type="email" name="owner" id="owner" placeholder="ownerEmail@example.com" ref="owner" required onChange={this.onChange} value={owner}/>
                                     </Col>
                                 </FormGroup>
                                 <FormGroup check row>
                                     <Col sm={{ size: 12, offset: 0 }} className="d-flex justify-content-end">
-                                        <Button className="mr-4" color="info" onClick={this.clearInputs}>Clear</Button>
-                                        <Button color="success" onClick={this.insertPet}>Add</Button>
+                                        <Button className="mr-4" color="info">Clear</Button>
+                                        <Button color="success">Add</Button>
                                     </Col>
                                 </FormGroup>
                             </Form>
