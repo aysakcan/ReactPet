@@ -1,5 +1,5 @@
 # ReactPet
-React+Node.js
+React + Node.js + MySQL
 
 taskkill /im node.exe /F
 
