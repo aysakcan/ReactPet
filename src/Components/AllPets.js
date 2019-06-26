@@ -1,6 +1,16 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Table, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import {
+  Table, Button, Modal, ModalHeader, ModalBody, ModalFooter,
+  Jumbotron,
+  Container,
+  Col,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  FormText
+} from 'reactstrap';
 
 class AllPets extends Component {
   constructor() {
@@ -9,7 +19,16 @@ class AllPets extends Component {
       allTeams: [],
       initialTeams: [],
       isLoaded: false,
-      modal: false
+      modal: false,
+      selected: {},
+      edited: {
+        name: '',
+        age: '',
+        type: '',
+        genus: '',
+        desc: '',
+        owner: ''
+      }
     };
 
     this.toggle = this.toggle.bind(this);
@@ -43,52 +62,100 @@ class AllPets extends Component {
       .then(window.location.reload());*/
   };
 
-  toggle() {
+  toggle = (item) => {
     this.setState(prevState => ({
-      modal: !prevState.modal
+      modal: !prevState.modal,
+      selected: item,
+      edited: {
+        name: item.isim,
+        age: item.yas,
+        type: item.tur,
+        genus: item.cins,
+        desc: item.aciklama,
+        owner: item.user
+      }
     }));
   }
 
   filterListId(event) {
     var updatedList = this.state.initialTeams;
-    updatedList = updatedList.filter(function(item){
-      if(event.target.value !== '' )
+    updatedList = updatedList.filter(function (item) {
+      if (event.target.value !== '')
         return item.id == event.target.value;
-      else{
+      else {
         return true;
       }
     });
-    this.setState({allTeams: updatedList});
+    this.setState({ allTeams: updatedList });
   }
 
   filterListName(event) {
     var updatedList = this.state.initialTeams;
-    updatedList = updatedList.filter(function(item){
+    updatedList = updatedList.filter(function (item) {
       return item.isim.toLowerCase().search(
         event.target.value.toLowerCase()) !== -1;
     });
-    this.setState({allTeams: updatedList});
+    this.setState({ allTeams: updatedList });
   }
-  
+
   filterListAge(event) {
     var updatedList = this.state.initialTeams;
-    updatedList = updatedList.filter(function(item){
-      if(event.target.value !== '' )
+    updatedList = updatedList.filter(function (item) {
+      if (event.target.value !== '')
         return item.yas == event.target.value;
-      else{
+      else {
         return true;
       }
     });
-    this.setState({allTeams: updatedList});
+    this.setState({ allTeams: updatedList });
   }
 
   filterListDesc(event) {
     var updatedList = this.state.initialTeams;
-    updatedList = updatedList.filter(function(item){
+    updatedList = updatedList.filter(function (item) {
       return item.aciklama.toLowerCase().search(
         event.target.value.toLowerCase()) !== -1;
     });
-    this.setState({allTeams: updatedList});
+    this.setState({ allTeams: updatedList });
+  }
+
+  onChange = (e) => {
+    var edited = { ...this.state.edited }
+    if (e.target.name == 'name')
+      edited.name = e.target.value;
+    if (e.target.name == 'age')
+      edited.age = e.target.value;
+    if (e.target.name == 'type')
+      edited.type = e.target.value;
+    if (e.target.name == 'genus')
+      edited.genus = e.target.value;
+    if (e.target.name == 'desc')
+      edited.desc = e.target.value;
+    if (e.target.name == 'owner')
+      edited.owner = e.target.value;
+    this.setState({ edited })
+  }
+
+  onSubmit = (e) => {
+    e.preventDefault();
+    // get our form data out of state
+    const { name, age, type, genus, desc, owner } = this.state.edited;
+    const id = this.state.selected.id;
+
+    var postData = {
+      id: id,
+      name: name,
+      age: age,
+      type: type,
+      genus: genus,
+      desc: desc,
+      owner: owner
+    };
+
+    console.log(postData);
+
+    axios.post('http://localhost:3002/editAPet', postData)
+      .then(window.location.reload()); //this line is horrible
   }
 
 
@@ -98,6 +165,7 @@ class AllPets extends Component {
 
   render() {
     const { allTeams, isLoaded } = this.state;
+    const { name, age, type, genus, desc, owner } = this.state.edited;
     if (!isLoaded) return <div>Loading...</div>
     return (
       <Table responsive bordered>
@@ -111,10 +179,10 @@ class AllPets extends Component {
             <th></th>
           </tr>
           <tr>
-            <th><input type="text" className="form-control" placeholder="Search only on ID" onChange={this.filterListId}/></th>
-            <th><input type="text" className="form-control" placeholder="Search only on Name" onChange={this.filterListName}/></th>
-            <th><input type="text" className="form-control" placeholder="Search only on Age" onChange={this.filterListAge}/></th>
-            <th><input type="text" className="form-control" placeholder="Search only on Desc" onChange={this.filterListDesc}/></th>
+            <th><input type="text" className="form-control" placeholder="Search only on ID" onChange={this.filterListId} /></th>
+            <th><input type="text" className="form-control" placeholder="Search only on Name" onChange={this.filterListName} /></th>
+            <th><input type="text" className="form-control" placeholder="Search only on Age" onChange={this.filterListAge} /></th>
+            <th><input type="text" className="form-control" placeholder="Search only on Desc" onChange={this.filterListDesc} /></th>
             <th></th>
             <th></th>
           </tr>
@@ -127,17 +195,54 @@ class AllPets extends Component {
               <td>{item.yas}</td>
               <td>{item.aciklama}</td>
               <td><Button color="warning" onClick={() => this.deletePet(item.id)}>Delete</Button></td>
-              <td><Button color="success" className="editPet" onClick={this.toggle}>Edit</Button></td>
+              <td><Button color="success" className="editPet" onClick={() => this.toggle(item)}>Edit</Button></td>
             </tr>)}
         </tbody>
         <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-          <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
+          <ModalHeader toggle={() => this.toggle(this.state.selected)}>Edit Pet {this.state.selected.id}</ModalHeader>
           <ModalBody>
-            Edit the pet
+            <Form className="modalText">
+              <FormGroup row>
+                <Label for="name" sm={3}>Name</Label>
+                <Col sm={9} className="align-self-center px-4">
+                  <Input type="text" name="name" id="name" placeholder="Lucy" ref="name" required onChange={this.onChange} value={name} />
+                </Col>
+              </FormGroup>
+              <FormGroup row>
+                <Label for="age" sm={3}>Age</Label>
+                <Col sm={9} className="align-self-center px-4">
+                  <Input type="number" name="age" id="age" placeholder="2" min="1" ref="age" required onChange={this.onChange} value={age} />
+                </Col>
+              </FormGroup>
+              <FormGroup row>
+                <Label for="type" sm={3}>Type</Label>
+                <Col sm={9} className="align-self-center px-4">
+                  <Input type="text" name="type" id="type" placeholder="Dog" ref="type" required onChange={this.onChange} value={type} />
+                </Col>
+              </FormGroup>
+              <FormGroup row>
+                <Label for="genus" sm={3}>Genus</Label>
+                <Col sm={9} className="align-self-center px-4">
+                  <Input type="text" name="genus" id="genus" placeholder="Golden" ref="genus" required onChange={this.onChange} value={genus} />
+                </Col>
+              </FormGroup>
+              <FormGroup row>
+                <Label for="desc" sm={3}>Explanation</Label>
+                <Col sm={9} className="align-self-center px-4">
+                  <Input type="text" name="desc" id="desc" placeholder="Female.." ref="desc" required onChange={this.onChange} value={desc} />
+                </Col>
+              </FormGroup>
+              <FormGroup row>
+                <Label for="owner" sm={3}>Email</Label>
+                <Col sm={9} className="align-self-center px-4">
+                  <Input type="email" name="owner" id="owner" placeholder="ownerEmail@example.com" ref="owner" required onChange={this.onChange} value={owner} />
+                </Col>
+              </FormGroup>
+            </Form>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={this.toggle}>Save</Button>{' '}
-            <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+            <Button color="primary" onClick={this.onSubmit}>Save</Button>{' '}
+            <Button color="secondary" onClick={() => this.toggle(this.state.selected)}>Cancel</Button>
           </ModalFooter>
         </Modal>
       </Table>

@@ -133,3 +133,8 @@ body{
   color: white !important;
   font-size: calc(10px + 2vmin);
 }
+
+.modalText{
+  text-align: center;
+  font-weight: bold;
+}

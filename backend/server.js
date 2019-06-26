@@ -39,6 +39,16 @@ app.post(`/insertAPet`, (req, res) => {
     });
 });
 
+app.post(`/editAPet`, (req, res) => {
+    const { id, name, age, type, genus, desc, owner  } = req.body;
+    const values = [name, type, genus, age, desc, owner];
+    const sqlcom = `UPDATE pet SET isim = ? , tur = ? , cins = ? , yas = ? , aciklama = ? , user = ?  WHERE id = ` + id + `;`
+    connection.query(sqlcom , values , err => {
+        if (err) throw err;
+        console.log(`${name} UPDATED`);
+    });
+});
+
 app.listen(port, err => {
     if (err) throw err;
     console.log(`Server is listening on ${port}`);
