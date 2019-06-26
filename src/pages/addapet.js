@@ -39,10 +39,19 @@ export default class Homepage extends React.Component {
         // get our form data out of state
         const { name, age, type, genus, desc, owner } = this.state;
 
-        axios.post('http://localhost:3002/insertAPet', { name, age, type, genus, desc, owner })
-          .then((result) => {
-            //access the results here....
-          });
+        var postData = {
+            name: name,
+            age: age,
+            type: type,
+            genus: genus,
+            desc: desc,
+            owner: owner
+          };
+
+          console.log(postData);
+
+        axios.post('http://localhost:3002/insertAPet', postData)
+        .then(window.location.reload()); //this line is horrible
     }
 
     render() {

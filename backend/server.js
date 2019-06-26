@@ -31,9 +31,9 @@ app.delete('/deleteAPet/:PetId', (req, res) => {
 });
 
 app.post(`/insertAPet`, (req, res) => {
-    const { name, age, type, genus, desc, owner  } = req.params;
-    if (!name) return;
-    connection.query(`INSERT INTO pet (isim, tur, cins, yas, aciklama, user) VALUES (?);`, name, type, genus, age, desc, owner , err => {
+    const { name, age, type, genus, desc, owner  } = req.body;
+    const values = [name, type, genus, age, desc, owner];
+    connection.query(`INSERT INTO pet (isim, tur, cins, yas, aciklama, user) VALUES (?, ?, ?, ? ,?, ?);`, values , err => {
         if (err) throw err;
         console.log(`${name} INSERTED`);
     });
