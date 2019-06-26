@@ -2,6 +2,10 @@
   text-align: center;
 }
 
+body{
+  overflow: auto;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -128,8 +132,4 @@
 .formText{
   color: white !important;
   font-size: calc(10px + 2vmin);
-}
-
-body {
-  overflow-y: hidden;
 }
