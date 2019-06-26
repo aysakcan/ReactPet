@@ -7,16 +7,22 @@ class AllPets extends Component {
     super();
     this.state = {
       allTeams: [],
+      initialTeams: [],
       isLoaded: false,
       modal: false
     };
 
     this.toggle = this.toggle.bind(this);
+    this.filterListName = this.filterListName.bind(this);
+    this.filterListId = this.filterListId.bind(this);
+    this.filterListAge = this.filterListAge.bind(this);
+    this.filterListDesc = this.filterListDesc.bind(this);
   };
 
   loadTeamsNames = () => {
     axios.get(`http://localhost:3002/getPet`)
       .then(response => this.setState({
+        initialTeams: response.data.reverse(),
         allTeams: response.data.reverse(),
         isLoaded: true
       }));
@@ -43,6 +49,48 @@ class AllPets extends Component {
     }));
   }
 
+  filterListId(event) {
+    var updatedList = this.state.initialTeams;
+    updatedList = updatedList.filter(function(item){
+      if(event.target.value !== '' )
+        return item.id == event.target.value;
+      else{
+        return true;
+      }
+    });
+    this.setState({allTeams: updatedList});
+  }
+
+  filterListName(event) {
+    var updatedList = this.state.initialTeams;
+    updatedList = updatedList.filter(function(item){
+      return item.isim.toLowerCase().search(
+        event.target.value.toLowerCase()) !== -1;
+    });
+    this.setState({allTeams: updatedList});
+  }
+  
+  filterListAge(event) {
+    var updatedList = this.state.initialTeams;
+    updatedList = updatedList.filter(function(item){
+      if(event.target.value !== '' )
+        return item.yas == event.target.value;
+      else{
+        return true;
+      }
+    });
+    this.setState({allTeams: updatedList});
+  }
+
+  filterListDesc(event) {
+    var updatedList = this.state.initialTeams;
+    updatedList = updatedList.filter(function(item){
+      return item.aciklama.toLowerCase().search(
+        event.target.value.toLowerCase()) !== -1;
+    });
+    this.setState({allTeams: updatedList});
+  }
+
 
   componentDidMount() {
     this.loadTeamsNames();
@@ -55,10 +103,18 @@ class AllPets extends Component {
       <Table responsive bordered>
         <thead>
           <tr>
-            <th>#</th>
+            <th>ID</th>
             <th>Name</th>
             <th>Age</th>
             <th>Desc</th>
+            <th></th>
+            <th></th>
+          </tr>
+          <tr>
+            <th><input type="text" className="form-control" placeholder="Search only on ID" onChange={this.filterListId}/></th>
+            <th><input type="text" className="form-control" placeholder="Search only on Name" onChange={this.filterListName}/></th>
+            <th><input type="text" className="form-control" placeholder="Search only on Age" onChange={this.filterListAge}/></th>
+            <th><input type="text" className="form-control" placeholder="Search only on Desc" onChange={this.filterListDesc}/></th>
             <th></th>
             <th></th>
           </tr>
