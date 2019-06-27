@@ -138,3 +138,7 @@ body{
   text-align: center;
   font-weight: bold;
 }
+
+.alertText{
+  font-size: 20px;
+}

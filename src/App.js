@@ -5,12 +5,17 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import AuthorizedRoute from './AuthorizedRoute'
 import store from './store'
 
+import { PrivateRoute } from './Components/PrivateRoute';
 // Layouts
 import Login from './pages/login'
 import Register from './pages/register'
 import Homepage from './pages/homepage'
 import ListPets from './pages/listofpets'
 import AddPet from './pages/addapet'
+import Profile from './pages/profile'
+
+import { configureFakeBackend } from './_helpers';
+configureFakeBackend();
 
 // ** See notes on this `<App>` component at the bottom of this file **
 const App = props => (
@@ -18,12 +23,13 @@ const App = props => (
     <BrowserRouter>
       <div>
         <Switch>
+          <PrivateRoute exact path="/" component={Profile} />
           <Route path="/login" component={Login} />
           <Route path="/homepage" component={Homepage} />
           <Route path="/register" component={Register} />
           <Route path="/listofpets" component={ListPets} />
           <Route path="/addpet" component={AddPet} />
-          <AuthorizedRoute path="/register" component={Register} />
+          <AuthorizedRoute path="/profile" component={Profile} />
           <Redirect to="/homepage" />
         </Switch>
       </div>
