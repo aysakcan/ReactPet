@@ -21,6 +21,13 @@ app.get('/getPet', (req, res) => {
     });
 });
 
+app.get('/getUsers', (req, res) => {
+    connection.query('SELECT * FROM users;', (err, rows, fields) => {
+        if (err) throw err;
+        res.status(200).send(rows);
+    });
+});
+
 app.delete('/deleteAPet/:PetId', (req, res) => {
     const { PetId } = req.params;
     if (!PetId) return;

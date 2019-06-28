@@ -19,8 +19,7 @@ export default class Profile extends React.Component {
         };
         
     }
-
-
+    
     componentDidMount() {
         //$('#loginLink').text('Logout');
         //$('#registerLink').css("display", "none");
@@ -44,9 +43,11 @@ export default class Profile extends React.Component {
                                 <CardBody>
                                     <CardTitle> <strong>Hello {user.firstName}!</strong> </CardTitle>
                                     <CardSubtitle><br></br></CardSubtitle>
-                                    <CardText>Email : {user.username}</CardText>
+                                    <CardText>Email : {user.email}</CardText>
                                     <CardText>Name : {user.firstName}</CardText>
                                     <CardText>Surname : {user.lastName}</CardText>
+                                    <CardText>Phone : {user.phone}</CardText>
+                                    <CardText>Address : {user.address}</CardText>
                                     <Button href="/login" >Logout</Button>
                                 </CardBody>
                             </Card>

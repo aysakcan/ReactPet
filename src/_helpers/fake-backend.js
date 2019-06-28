@@ -1,6 +1,12 @@
+import axios from 'axios';
+
 export function configureFakeBackend() {
     let users = [{ id: 1, username: 'a@gmail.com', password: '1', firstName: 'Test', lastName: 'User' }];
     let realFetch = window.fetch;
+
+    axios.get(`http://localhost:3002/getUsers`)
+      .then(response => users = response.data.reverse() );
+
     window.fetch = function (url, opts) {
         return new Promise((resolve, reject) => {
             // wrap in timeout to simulate server api call
@@ -13,17 +19,19 @@ export function configureFakeBackend() {
 
                     // find if any user matches login credentials
                     let filteredUsers = users.filter(user => {
-                        return user.username === params.username && user.password === params.password;
+                        return user.user_email === params.username && user.user_password === params.password;
                     });
 
                     if (filteredUsers.length) {
                         // if login details are valid return user details
                         let user = filteredUsers[0];
                         let responseJson = {
-                            id: user.id,
-                            username: user.username,
-                            firstName: user.firstName,
-                            lastName: user.lastName
+                            id: user.userid,
+                            email: user.user_email,
+                            firstName: user.user_first_name,
+                            lastName: user.user_last_name,
+                            phone : user.user_phone,
+                            address : user.user_address1
                         };
                         resolve({ ok: true, text: () => Promise.resolve(JSON.stringify(responseJson)) });
                     } else {
