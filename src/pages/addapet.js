@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import axios from 'axios';
 import '../stylesheets/App.css';
 import NavbarHeader from '../Components/NavbarHeader';
@@ -21,12 +20,13 @@ export default class Homepage extends React.Component {
         super();
 
         this.state = {
+            user: JSON.parse(localStorage.getItem('user')),
             name: '',
             age: '',
             type: '',
             genus: '',
             desc: '',
-            owner: ''
+            owner: JSON.parse(localStorage.getItem('user')).email
         };
     }
 
@@ -114,7 +114,7 @@ export default class Homepage extends React.Component {
                                 <FormGroup row>
                                     <Label for="owner" sm={3}>Email</Label>
                                     <Col sm={9} className="align-self-center px-4">
-                                        <Input type="email" name="owner" id="owner" placeholder="ownerEmail@example.com" ref="owner" required onChange={this.onChange} value={owner} />
+                                        <Input readOnly type="email" name="owner" id="owner" placeholder="ownerEmail@example.com" ref="owner" value={owner} />
                                     </Col>
                                 </FormGroup>
                                 <FormGroup check row>

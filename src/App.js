@@ -26,8 +26,8 @@ const App = props => (
           <Route path="/login" component={Login} />
           <Route path="/homepage" component={Homepage} />
           <Route path="/register" component={Register} />
-          <Route path="/listofpets" component={ListPets} />
-          <Route path="/addpet" component={AddPet} />
+          <PrivateRoute exact path="/listofpets" component={ListPets} />
+          <PrivateRoute exact path="/addpet" component={AddPet} />
           <PrivateRoute exact path="/profile" component={Profile} />
           <Redirect to="/homepage" />
         </Switch>

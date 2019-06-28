@@ -12,7 +12,6 @@ import {
   DropdownMenu,
   DropdownItem
 } from 'reactstrap';
-import Login from '../pages/login';
 
 export default class NavbarHeader extends React.Component {
   constructor(props) {
@@ -39,28 +38,35 @@ export default class NavbarHeader extends React.Component {
               <NavItem>
                 <NavLink id="loginLink" href="/login">{localStorage.getItem('user') ? 'Logout' : 'Login'}</NavLink>
               </NavItem>
-              {localStorage.getItem('user') ? '' : 
-              <NavItem>
-                <NavLink id="registerLink" href="/register">Register</NavLink>
-              </NavItem>
+              {localStorage.getItem('user') ? '' :
+                <NavItem>
+                  <NavLink id="registerLink" href="/register">Register</NavLink>
+                </NavItem>
               }
-              <UncontrolledDropdown nav inNavbar>
-                <DropdownToggle nav caret>
-                  Pets
-                </DropdownToggle>
-                <DropdownMenu right>
-                  <DropdownItem href="/addpet">
-                    Add a Pet
-                  </DropdownItem>
-                  <DropdownItem href="/listofpets">
-                    List of Pets
-                  </DropdownItem>
-                  <DropdownItem divider />
-                  <DropdownItem href="https://www.google.com/" target="_blank">
-                    Google
-                  </DropdownItem>
-                </DropdownMenu>
-              </UncontrolledDropdown>
+              {localStorage.getItem('user') ?
+                <UncontrolledDropdown nav inNavbar>
+                  <DropdownToggle nav caret>
+                    {JSON.parse(localStorage.getItem('user')).role == "ADMIN" ? 'All Pets' : 'My Pets'}
+                  </DropdownToggle>
+                  <DropdownMenu right>
+                    <DropdownItem href="/addpet">
+                      Add a Pet
+                    </DropdownItem>
+                    <DropdownItem href="/listofpets">
+                      List of Pets
+                    </DropdownItem>
+                    <DropdownItem divider />
+                    {localStorage.getItem('user') ?
+                      <DropdownItem href="/profile">
+                        Profile
+                    </DropdownItem>
+                      :
+                    ''
+                    }
+                  </DropdownMenu>
+                </UncontrolledDropdown>
+                : ''
+              }
             </Nav>
           </Collapse>
         </Navbar>

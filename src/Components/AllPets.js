@@ -28,7 +28,8 @@ class AllPets extends Component {
         genus: '',
         desc: '',
         owner: ''
-      }
+      },
+      user : {}
     };
 
     this.toggle = this.toggle.bind(this);
@@ -39,12 +40,28 @@ class AllPets extends Component {
   };
 
   loadTeamsNames = () => {
-    axios.get(`http://localhost:3002/getPet`)
+    let user = JSON.parse(localStorage.getItem('user'));
+    this.setState({user : user});
+
+    if(localStorage.getItem('user') && user.role == "USER"){
+      axios.get(`http://localhost:3002/getPet`)
+      .then(response => this.setState({
+        initialTeams: response.data.reverse().filter(pet => {
+          return pet.user == user.email ;
+        }),
+        allTeams: response.data.reverse().filter(pet => {
+          return pet.user == user.email ;
+        }),
+        isLoaded: true
+      }));
+    } else {
+      axios.get(`http://localhost:3002/getPet`)
       .then(response => this.setState({
         initialTeams: response.data.reverse(),
         allTeams: response.data.reverse(),
         isLoaded: true
       }));
+    }
   };
 
   deletePet = (id) => {
@@ -235,7 +252,7 @@ class AllPets extends Component {
               <FormGroup row>
                 <Label for="owner" sm={3}>Email</Label>
                 <Col sm={9} className="align-self-center px-4">
-                  <Input type="email" name="owner" id="owner" placeholder="ownerEmail@example.com" ref="owner" required onChange={this.onChange} value={owner} />
+                  <Input type="email" name="owner" id="owner" placeholder="ownerEmail@example.com" ref="owner" readOnly value={owner} />
                 </Col>
               </FormGroup>
             </Form>

@@ -1,12 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import $ from 'jquery';
 import {
     Card, CardImg, CardText, CardBody,
     CardTitle, CardSubtitle, Button
 } from 'reactstrap';
 
-import { userService } from '../_services';
 import NavbarHeader from '../Components/NavbarHeader';
 
 export default class Profile extends React.Component {
@@ -14,8 +11,7 @@ export default class Profile extends React.Component {
         super(props);
 
         this.state = {
-            user: {},
-            users: []
+            user: {}
         };
         
     }
@@ -25,14 +21,13 @@ export default class Profile extends React.Component {
         //$('#registerLink').css("display", "none");
 
         this.setState({
-            user: JSON.parse(localStorage.getItem('user')),
-            users: { loading: true }
+            user: JSON.parse(localStorage.getItem('user'))
         });
         //userService.getAll().then(users => this.setState({ users }));
     }
 
     render() {
-        const { user, users } = this.state;
+        const { user } = this.state;
         return (
             <div className="App">
                 <header className="App-header">
@@ -48,6 +43,7 @@ export default class Profile extends React.Component {
                                     <CardText>Surname : {user.lastName}</CardText>
                                     <CardText>Phone : {user.phone}</CardText>
                                     <CardText>Address : {user.address}</CardText>
+                                    <CardText>Role : {user.role}</CardText>
                                     <Button href="/login" >Logout</Button>
                                 </CardBody>
                             </Card>

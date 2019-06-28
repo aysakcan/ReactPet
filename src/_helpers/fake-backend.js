@@ -1,11 +1,15 @@
 import axios from 'axios';
 
 export function configureFakeBackend() {
-    let users = [{ id: 1, username: 'a@gmail.com', password: '1', firstName: 'Test', lastName: 'User' }];
+    let users = [];
+    let userRoles = [];
     let realFetch = window.fetch;
 
     axios.get(`http://localhost:3002/getUsers`)
       .then(response => users = response.data.reverse() );
+
+      axios.get(`http://localhost:3002/getUserRoles`)
+      .then(response => userRoles = response.data.reverse() );
 
     window.fetch = function (url, opts) {
         return new Promise((resolve, reject) => {
@@ -23,15 +27,21 @@ export function configureFakeBackend() {
                     });
 
                     if (filteredUsers.length) {
-                        // if login details are valid return user details
                         let user = filteredUsers[0];
+
+                        let filteredRoles = userRoles.filter(role => {
+                            return role.user_id === user.userid ;
+                        });
+
+                        // if login details are valid return user details
                         let responseJson = {
                             id: user.userid,
                             email: user.user_email,
                             firstName: user.user_first_name,
                             lastName: user.user_last_name,
                             phone : user.user_phone,
-                            address : user.user_address1
+                            address : user.user_address1,
+                            role : filteredRoles[0].roles
                         };
                         resolve({ ok: true, text: () => Promise.resolve(JSON.stringify(responseJson)) });
                     } else {
