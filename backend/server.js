@@ -44,6 +44,19 @@ app.delete('/deleteAPet/:PetId', (req, res) => {
     });
 });
 
+app.delete('/deleteAnUser/:UserId', (req, res) => {
+    const { UserId } = req.params;
+    if (!UserId) return;
+    connection.query('DELETE FROM users WHERE userid = ?', UserId, (err, rows, fields) => {
+        if (err) throw err;
+        console.log(`you delete ${rows.affectedRows} row`);
+    });
+    connection.query('DELETE FROM user_role WHERE user_id = ?', UserId, (err, rows, fields) => {
+        if (err) throw err;
+        console.log(`you delete ${rows.affectedRows} row`);
+    });
+});
+
 app.post(`/insertAPet`, (req, res) => {
     const { name, age, type, genus, desc, owner  } = req.body;
     const values = [name, type, genus, age, desc, owner];

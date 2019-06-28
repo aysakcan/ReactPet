@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import store from './_services/store'
 
-import { PrivateRoute } from './Components/PrivateRoute';
+import { PrivateRoute, PrivateRouteAdmin } from './Components/PrivateRoute';
 // Layouts
 import Login from './pages/login'
 import Register from './pages/register'
@@ -12,6 +12,8 @@ import Homepage from './pages/homepage'
 import ListPets from './pages/listofpets'
 import AddPet from './pages/addapet'
 import Profile from './pages/profile'
+import ListUsers from './pages/listofuser'
+import AddUser from './pages/adduser'
 
 import { configureFakeBackend } from './_helpers';
 configureFakeBackend();
@@ -25,6 +27,8 @@ const App = props => (
           <Route path="/login" component={Login} />
           <Route path="/homepage" component={Homepage} />
           <Route path="/register" component={Register} />
+          <PrivateRouteAdmin exact path="/listofuser" component={ListUsers} />
+          <PrivateRouteAdmin exact path="/adduser" component={AddUser} />
           <PrivateRoute exact path="/listofpets" component={ListPets} />
           <PrivateRoute exact path="/addpet" component={AddPet} />
           <PrivateRoute exact path="/profile" component={Profile} />

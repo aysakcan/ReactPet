@@ -55,17 +55,32 @@ export default class NavbarHeader extends React.Component {
                     <DropdownItem href="/listofpets">
                       List of Pets
                     </DropdownItem>
-                    <DropdownItem divider />
-                    {localStorage.getItem('user') ?
-                      <DropdownItem href="/profile">
-                        Profile
-                    </DropdownItem>
-                      :
-                    ''
-                    }
                   </DropdownMenu>
                 </UncontrolledDropdown>
                 : ''
+              }
+              {localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')).role == "ADMIN" ?
+                <UncontrolledDropdown nav inNavbar>
+                  <DropdownToggle nav caret>
+                    All Users
+                  </DropdownToggle>
+                  <DropdownMenu right>
+                    <DropdownItem href="/adduser">
+                      Add an User
+                    </DropdownItem>
+                    <DropdownItem href="/listofuser">
+                      List of Users
+                    </DropdownItem>
+                  </DropdownMenu>
+                </UncontrolledDropdown>
+                : ''
+              }
+              {localStorage.getItem('user') ?
+                <NavItem>
+                  <NavLink href="/profile">Profile</NavLink>
+                </NavItem>
+                :
+                ''
               }
             </Nav>
           </Collapse>
