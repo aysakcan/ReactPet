@@ -10,7 +10,9 @@ import {
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem } from 'reactstrap';
+  DropdownItem
+} from 'reactstrap';
+import Login from '../pages/login';
 
 export default class NavbarHeader extends React.Component {
   constructor(props) {
@@ -35,11 +37,13 @@ export default class NavbarHeader extends React.Component {
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>
-                <NavLink href="/login">Login</NavLink>
+                <NavLink id="loginLink" href="/login">{localStorage.getItem('user') ? 'Logout' : 'Login'}</NavLink>
               </NavItem>
+              {localStorage.getItem('user') ? '' : 
               <NavItem>
-                <NavLink href="/register">Register</NavLink>
+                <NavLink id="registerLink" href="/register">Register</NavLink>
               </NavItem>
+              }
               <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret>
                   Pets

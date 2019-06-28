@@ -142,3 +142,14 @@ body{
 .alertText{
   font-size: 20px;
 }
+
+.cardImage{
+  width: 40vh !important;
+  align-self: center;
+  margin: 10px;
+}
+
+.cardText {
+  font-size: larger;
+  color: #212529
+}

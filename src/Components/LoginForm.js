@@ -18,8 +18,6 @@ export default class LoginForm extends React.Component {
     constructor(props) {
         super(props);
 
-        userService.logout();
-
         this.state = {
             email: '',
             password: '',
@@ -54,8 +52,8 @@ export default class LoginForm extends React.Component {
         userService.login(email, password)
             .then(
                 user => {
-                    //const { from } = this.props.location.state || { from: { pathname: "/" } };
-                    //this.props.history.push(from);
+                    const { from } = this.props.location.state || { from: { pathname: "/profile" } };
+                    this.props.history.push(from);
                     console.log(user);
                 },
                 error => this.setState({ error, loading: false })

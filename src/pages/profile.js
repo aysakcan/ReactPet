@@ -1,7 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import $ from 'jquery';
+import {
+    Card, CardImg, CardText, CardBody,
+    CardTitle, CardSubtitle, Button
+} from 'reactstrap';
 
 import { userService } from '../_services';
+import NavbarHeader from '../Components/NavbarHeader';
 
 export default class Profile extends React.Component {
     constructor(props) {
@@ -11,36 +17,42 @@ export default class Profile extends React.Component {
             user: {},
             users: []
         };
+        
     }
 
+
     componentDidMount() {
-        this.setState({ 
+        //$('#loginLink').text('Logout');
+        //$('#registerLink').css("display", "none");
+
+        this.setState({
             user: JSON.parse(localStorage.getItem('user')),
             users: { loading: true }
         });
-        userService.getAll().then(users => this.setState({ users }));
+        //userService.getAll().then(users => this.setState({ users }));
     }
 
     render() {
         const { user, users } = this.state;
         return (
-            <div className="col-md-6 col-md-offset-3">
-                <h1>Hi {user.firstName}!</h1>
-                <p>You're logged in with React & Basic HTTP Authentication!!</p>
-                <h3>Users from secure api end point:</h3>
-                {users.loading && <em>Loading users...</em>}
-                {users.length &&
-                    <ul>
-                        {users.map((user, index) =>
-                            <li key={user.id}>
-                                {user.firstName + ' ' + user.lastName}
-                            </li>
-                        )}
-                    </ul>
-                }
-                <p>
-                    <Link to="/login">Logout</Link>
-                </p>
+            <div className="App">
+                <header className="App-header">
+                    <NavbarHeader />
+                    <div className="col-sm-12 col-md-6 offset-md-3 cardText">
+                            <Card className="mt-3">
+                                <CardImg className="cardImage" src="https://www.w3schools.com/howto/img_avatar2.png" alt="Card image cap" />
+                                <CardBody>
+                                    <CardTitle> <strong>Hello {user.firstName}!</strong> </CardTitle>
+                                    <CardSubtitle><br></br></CardSubtitle>
+                                    <CardText>Email : {user.username}</CardText>
+                                    <CardText>Name : {user.firstName}</CardText>
+                                    <CardText>Surname : {user.lastName}</CardText>
+                                    <Button href="/login" >Logout</Button>
+                                </CardBody>
+                            </Card>
+
+                    </div>
+                </header>
             </div>
         );
     }
