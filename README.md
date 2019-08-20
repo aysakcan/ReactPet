@@ -8,6 +8,8 @@ npm install
 npm start
 
 
-/backent npm install
+/backend npm install
 
-/backent node server.js
+/backend node server.js
+
+<Input type="select" name="gender" id="exampleSelect"><option>Female</option><option>Male</option></Input>

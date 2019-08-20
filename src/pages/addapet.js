@@ -15,7 +15,7 @@ import {
     FormText
 } from 'reactstrap';
 
-export default class Homepage extends React.Component {
+export default class AddPet extends React.Component {
     constructor() {
         super();
 

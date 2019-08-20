@@ -58,21 +58,61 @@ app.delete('/deleteAnUser/:UserId', (req, res) => {
 });
 
 app.post(`/insertAPet`, (req, res) => {
-    const { name, age, type, genus, desc, owner  } = req.body;
+    const { name, age, type, genus, desc, owner } = req.body;
     const values = [name, type, genus, age, desc, owner];
-    connection.query(`INSERT INTO pet (isim, tur, cins, yas, aciklama, user) VALUES (?, ?, ?, ? ,?, ?);`, values , err => {
+    connection.query(`INSERT INTO pet (isim, tur, cins, yas, aciklama, user) VALUES (?, ?, ?, ? ,?, ?);`, values, err => {
         if (err) throw err;
         console.log(`${name} INSERTED`);
     });
 });
 
+app.post(`/insertAnUser`, (req, res) => {
+    const { name, surname, email, password, phone, address, role } = req.body;
+    const values = [name, surname, email, password, phone, address];
+    connection.query(`INSERT INTO users (user_first_name, user_last_name, user_email, user_password, user_phone, user_address1) VALUES (?, ?, ?, ? ,?, ?);`, values, err => {
+        if (err) throw err;
+        console.log(`${name} INSERTED`);
+    });
+
+    var id = 0;
+
+    connection.query('SELECT * FROM users ORDER BY userid DESC LIMIT 0,1;', (err, rows, fields) => {
+        if (err) throw err;
+        id = rows[0].userid;
+
+        const values2 = [id, role];
+        connection.query(`INSERT INTO user_role (user_id, roles) VALUES (?, ?);`, values2, err => {
+            if (err) throw err;
+            console.log(`${id} INSERTED`);
+        });
+    });
+});
+
+
 app.post(`/editAPet`, (req, res) => {
-    const { id, name, age, type, genus, desc, owner  } = req.body;
+    const { id, name, age, type, genus, desc, owner } = req.body;
     const values = [name, type, genus, age, desc, owner];
     const sqlcom = `UPDATE pet SET isim = ? , tur = ? , cins = ? , yas = ? , aciklama = ? , user = ?  WHERE id = ` + id + `;`
-    connection.query(sqlcom , values , err => {
+    connection.query(sqlcom, values, err => {
         if (err) throw err;
         console.log(`${name} UPDATED`);
+    });
+});
+
+app.post(`/editAnUser`, (req, res) => {
+    const { id, name, surname, email, password, phone, address, role } = req.body;
+    const values = [name, surname, email, password, phone, address];
+    const sqlcom = `UPDATE users SET user_first_name = ? , user_last_name = ? , user_email = ? , user_password = ? , user_phone = ? , user_address1 = ?  WHERE userid = ` + id + `;`
+    connection.query(sqlcom, values, err => {
+        if (err) throw err;
+        console.log(`${name} UPDATED`);
+
+        const values2 = [role];
+        const sqlcom2 = `UPDATE user_role SET roles = ?  WHERE user_id = ` + id + `;`
+        connection.query(sqlcom2, values2, err => {
+            if (err) throw err;
+            console.log(`${id} UPDATED`);
+        });
     });
 });
 
